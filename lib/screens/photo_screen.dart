@@ -91,7 +91,11 @@ class _PhotoScreenState extends State<PhotoScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-                Image.file(image),
+                SizedBox(
+                  child: Image.file(image),
+                  height: 300,
+                  width: 300,
+                ),
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
