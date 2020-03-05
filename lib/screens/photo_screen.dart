@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'new_post_screen.dart';
+import 'package:wasteagram/widgets/buttons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -29,141 +29,60 @@ class _PhotoScreenState extends State<PhotoScreen> {
   @override
   Widget build(BuildContext context) {
     if (image == null)
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Wasteagram"),
-          centerTitle: true,
+      return NoImageYet(context);
+    else{
+        return ImageSelected(context);
+      }
+  }
+
+  Widget NoImageYet(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Wasteagram"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                TakePhotoButton(context, getImageFromCamera),
+                SizedBox(width: 10),
+                GetGalleryImageButton(context, getImageFromGallery)
+              ],
+            ),
+          ],
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: RaisedButton(
-                      onPressed: () {
-                        getImageFromCamera();
-                      },
-                      child: (
-                        Text(
-                          "Take Photo", 
-                          style: TextStyle(
-                            color: Colors.white, 
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        )
-                      ), 
-                      color: Colors.deepOrange,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: RaisedButton(
-                      onPressed: () {
-                        getImageFromGallery();
-                      },
-                      child: (
-                        Text(
-                          "Get Image From Gallery", 
-                          style: TextStyle(
-                            color: Colors.white, 
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        )
-                      ), 
-                      color: Colors.deepOrange,
-                    ),
-                  ),
+      ),
+    );
+  }
+
+  Widget ImageSelected(BuildContext context){
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+            SizedBox(
+              child: Image.file(image),
+              height: 300,
+              width: 300,
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  
+                  TakeNewPhotoButton(context, getImageFromCamera),
+                  SizedBox(width: 5),
+                  GetNewGalleryImageButton(context, getImageFromGallery)
                 ],
               ),
-            ],
-          ),
-        ),
-      );
-      else{
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-                SizedBox(
-                  child: Image.file(image),
-                  height: 300,
-                  width: 300,
-                ),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: RaisedButton(
-                          onPressed: () {
-                            getImageFromCamera();
-                          },
-                          child: (
-                            Text(
-                              "Take New Photo", 
-                              style: TextStyle(
-                                color: Colors.white, 
-                                fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            )
-                          ), 
-                          color: Colors.deepOrange,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: RaisedButton(
-                          onPressed: () {
-                            getImageFromGallery();
-                          },
-                          child: (
-                            Text(
-                              "Get New Image", 
-                              style: TextStyle(
-                                color: Colors.white, 
-                                fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            )
-                          ), 
-                          color: Colors.deepOrange,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NewPostScreen(image: image,)));
-                    },
-                    child: (
-                      Text(
-                        "Use This Image", 
-                        style: TextStyle(
-                          color: Colors.deepOrange, 
-                          fontSize: 20,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      )
-                    ), 
-                    color: Colors.white,
-                  ),
-                ),
-            ],
-          ),
-        );
-      }
+            ),
+            UseImageButton(context, image)
+        ],
+      ),
+    );
   }
 }
