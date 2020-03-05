@@ -50,3 +50,113 @@ Widget SaveEntryButton(BuildContext context, formKey, locationData){
     )
   );
 }
+
+Widget TakePhotoButton(BuildContext context, Function() func){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: RaisedButton(
+      onPressed: () {
+        func();
+      },
+      child: (
+        Text(
+          "Take Photo", 
+          style: TextStyle(
+            color: Colors.white, 
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+          ),
+        )
+      ), 
+      color: Colors.deepOrange,
+    ),
+  );
+}
+
+Widget TakeNewPhotoButton(BuildContext context, Function() func){
+  return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: RaisedButton(
+        onPressed: () {
+          func();
+        },
+        child: (
+          Text(
+            "Take New Photo", 
+            style: TextStyle(
+              color: Colors.white, 
+              fontSize: 20,
+              fontStyle: FontStyle.italic,
+            ),
+          )
+        ), 
+        color: Colors.deepOrange,
+    )
+  );
+}
+
+Widget GetGalleryImageButton(BuildContext context, Function() func){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: RaisedButton(
+      onPressed: () {
+        func();
+      },
+      child: (
+        Text(
+          "Get Image From Gallery", 
+          style: TextStyle(
+            color: Colors.white, 
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+          ),
+        )
+      ), 
+      color: Colors.deepOrange,
+    ),
+  );
+}
+
+Widget GetNewGalleryImageButton(BuildContext context, Function() func){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: RaisedButton(
+      onPressed: () {
+        func();
+      },
+      child: (
+        Text(
+          "Get New Image", 
+          style: TextStyle(
+            color: Colors.white, 
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+          ),
+        )
+      ), 
+      color: Colors.deepOrange,
+    ),
+  );
+}
+
+Widget UseImageButton(BuildContext context, image){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: RaisedButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NewPostScreen(image: image,)));
+      },
+      child: (
+        Text(
+          "Use This Image", 
+          style: TextStyle(
+            color: Colors.deepOrange, 
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+          ),
+        )
+      ), 
+      color: Colors.white,
+    ),
+  );
+}

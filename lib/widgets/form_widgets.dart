@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'buttons.dart';
 import '../screens/photo_screen.dart';
-import '../screens/detail_screen.dart';
 
 Widget PostForm(BuildContext context, formKey, locationData, image){
+  final imageStr = "TEST_URL";
   return Form( 
           key: formKey,
           child: SingleChildScrollView( 
@@ -14,7 +14,7 @@ Widget PostForm(BuildContext context, formKey, locationData, image){
                 //convert to dynamically sized container
                 ClickablePhoto(context, image),
                 SizedBox(height: 10),
-                ItemsInputBox(context),
+                ItemsInputBox(context, locationData.latitude, locationData.longitude),
                 SizedBox(height: 10),
                 SaveEntryButton(context, formKey, locationData),
               ]
@@ -49,7 +49,7 @@ Widget ClickablePhoto(BuildContext context, image){
   
 }
 
-Widget ItemsInputBox(BuildContext context){
+Widget ItemsInputBox(BuildContext context, double lat, double long){
   return TextFormField(
     keyboardType: TextInputType.number,
     autofocus: true,
@@ -60,7 +60,14 @@ Widget ItemsInputBox(BuildContext context){
       border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),),
     ),
     onSaved: (value) {
-      //save values to database
+      //save values in firestore database
+      Firestore.instance.collection('wasteagramPosts').add({
+        'date': DateTime.now(),
+        'imageFilename': 'TEST_URL',
+        'numItemsWasted': int.parse(value),
+        'latitude': lat,
+        'longitude': long,
+      });
     },
     validator: (value) {
       if (value.isEmpty) {
