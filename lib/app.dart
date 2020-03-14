@@ -10,15 +10,7 @@ class WasteagramApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: ListScreen(),
-      /*
-      routes: {
-          '/': (context) => ListScreen(),
-          //'new_post': (context) => NewPostScreen(),
-          //'photo': (context) => PhotoScreen(),
-          //'detail': (context) => DetailScreen()
-        },
-        */
+      home: ListScreen()
     );
   }
 }
