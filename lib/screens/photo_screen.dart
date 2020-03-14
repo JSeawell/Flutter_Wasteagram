@@ -48,6 +48,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                
                 TakePhotoButton(context, getImageFromCamera),
                 SizedBox(width: 10),
                 GetGalleryImageButton(context, getImageFromGallery)

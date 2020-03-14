@@ -19,7 +19,6 @@ class _ListScreenState extends State<ListScreen> {
   
   @override
   Widget build(BuildContext context) {
-    //_totalItemsWasted = 0;
     return Scaffold(
       appBar: TopAppBarWithTotal(context),
       body: FirebasePostStream(context),
@@ -32,37 +31,40 @@ class _ListScreenState extends State<ListScreen> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     final newPost = Post(date: document['date'].toDate(), image_filename: document['imageFilename'], numItemsWasted: document['numItemsWasted'], latitude: document['latitude'].toDouble(), longitude: document['longitude'].toDouble());
-    return ListTile(
-      title: Card( 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: Center(child: Text("${newPost.image_filename}"),),
-              width: 150,
-              height: 150, 
-              color: Colors.deepOrange,
+    return Semantics(
+      label: "Wasteagram Post",
+      child: ListTile(
+        title: Card( 
+          color: Colors.deepOrange,
+          child: Padding(
+            padding: EdgeInsets.all(30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Semantics(
+                    label: "Post Date",
+                    child: Text(
+                    "${DateFormat.MMMMEEEEd().format(newPost.date)}",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Semantics(
+                  label: "Number of Wasted Food Items",
+                  child: Text(
+                    "${newPost.numItemsWasted}",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 10,),
-            Column(
-              children: [
-                Expanded(
-                  child: Text("${DateFormat.MMMMEEEEd().format(newPost.date)}"),
-                ),
-                Expanded(
-                child: Text("Wasted Items: ${newPost.numItemsWasted}"),
-                ),
-                Expanded(
-                  child: Text("( ${newPost.latitude.toStringAsFixed(3)}) ,  ${newPost.longitude.toStringAsFixed(3)} )"),
-                ),
-              ]
-            ),
-          ],
+          ),
         ),
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(post: newPost)));
+        },
       ),
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(post: newPost)));
-      },
     );
   }
 
@@ -79,7 +81,10 @@ class _ListScreenState extends State<ListScreen> {
             for( var i = 0 ; i < snapshot.data.documents.length; i++ ) { 
               totalItemsWasted += snapshot.data.documents[i]['numItemsWasted'];
             }
-            return Text("Wasteagram - $totalItemsWasted");
+            return Semantics(
+              child: Text("Wasteagram - $totalItemsWasted"),
+              label: "Total Food Items Wasted",
+            );
           }
         },
       ),
@@ -89,14 +94,14 @@ class _ListScreenState extends State<ListScreen> {
 
   Widget FirebasePostStream(BuildContext context){
     return StreamBuilder(
-      stream: Firestore.instance.collection('wasteagramPosts').snapshots(),
+      stream: Firestore.instance.collection('wasteagramPosts').orderBy('date', descending: true).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData){
+        if (!snapshot.hasData || snapshot.data.documents.length < 1){
           return Center(child: CircularProgressIndicator());
         }
         else{
           return ListView.builder(
-            itemExtent: 150.0,
+            itemExtent: 95.0,
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
               return _buildListItem(context, snapshot.data.documents[index]);
@@ -114,7 +119,7 @@ class _ListScreenState extends State<ListScreen> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          AddPostButton(context),
+          AddPostButton(context)
         ],
       ),
     );
