@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'buttons.dart';
 import '../screens/photo_screen.dart';
+import 'dart:io';
 
-Widget PostForm(BuildContext context, formKey, locationData, image){
-  final imageStr = "TEST_URL";
+Widget PostForm(BuildContext context, formKey, Future<String> Function(File image) getImageURL, locationData, image){
   return Form( 
           key: formKey,
           child: SingleChildScrollView( 
@@ -12,9 +12,12 @@ Widget PostForm(BuildContext context, formKey, locationData, image){
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //convert to dynamically sized container
-                ClickablePhoto(context, image),
+                Semantics(
+                  child: ClickablePhoto(context, image),
+                  onTapHint: "Click here to select image",
+                ),
                 SizedBox(height: 10),
-                ItemsInputBox(context, locationData.latitude, locationData.longitude),
+                ItemsInputBox(context, image, getImageURL, locationData.latitude, locationData.longitude),
                 SizedBox(height: 10),
                 SaveEntryButton(context, formKey, locationData),
               ]
@@ -27,7 +30,10 @@ Widget ClickablePhoto(BuildContext context, image){
   if (image == null){
     return InkWell(
     child: Container(
-      child: Center(child: Text("Select Photo"),),
+      child: Center(child: Text(
+          "Click here to select image",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),),
       height: 300, width: 300, color: Colors.deepOrange,
     ),
     onTap: (){
@@ -49,7 +55,7 @@ Widget ClickablePhoto(BuildContext context, image){
   
 }
 
-Widget ItemsInputBox(BuildContext context, double lat, double long){
+Widget ItemsInputBox(BuildContext context, File image, Future<String> Function(File image) getImageURL, double lat, double long){
   return TextFormField(
     keyboardType: TextInputType.number,
     autofocus: true,
@@ -59,11 +65,12 @@ Widget ItemsInputBox(BuildContext context, double lat, double long){
       labelText: '# of Items', 
       border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white),),
     ),
-    onSaved: (value) {
+    onSaved: (value) async {
+      //get image URL from cloud storage
       //save values in firestore database
       Firestore.instance.collection('wasteagramPosts').add({
         'date': DateTime.now(),
-        'imageFilename': 'TEST_URL',
+        'imageFilename':await getImageURL(image),
         'numItemsWasted': int.parse(value),
         'latitude': lat,
         'longitude': long,

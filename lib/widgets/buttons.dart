@@ -10,11 +10,14 @@ Widget AddPostButton(BuildContext context){
       splashColor: Colors.deepOrange,
       foregroundColor: Colors.deepOrange,
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NewPostScreen()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NewPostScreen()),);
       },
       tooltip: 'Add Post',
-      child: Icon(Icons.add),
+      child: Semantics(
+        child: Icon(Icons.add),
+        button: true,
+        onTapHint: "Add Post",
+        ),
     ),
   );
 }
@@ -24,28 +27,19 @@ Widget SaveEntryButton(BuildContext context, formKey, locationData){
     width: 200,
     child: ClipRRect(
       borderRadius: BorderRadius.circular(30),
-      child: RaisedButton(
+      child: FloatingActionButton(
         onPressed: () async {
           if (formKey.currentState.validate()){
             formKey.currentState.save();
-            //save journal entry fields to DB
-            print("( ${locationData.latitude} ,  ${locationData.longitude} ) ");
-            print("New Entry Posted!");
             //go to list screen
             Navigator.push(context, MaterialPageRoute(builder: (context) => ListScreen()));
           }
         },
-        child: (
-          Text(
-            "Post Entry", 
-            style: TextStyle(
-              color: Colors.white, 
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-            ),
-          )
+        child: Semantics(
+          child: Icon(Icons.cloud_upload),
+          button: true,
+          onTapHint: "Upload to cloud",
         ), 
-        color: Colors.deepOrange,
       ),
     )
   );
@@ -58,16 +52,11 @@ Widget TakePhotoButton(BuildContext context, Function() func){
       onPressed: () {
         func();
       },
-      child: (
-        Text(
-          "Take Photo", 
-          style: TextStyle(
-            color: Colors.white, 
-            fontSize: 20,
-            fontStyle: FontStyle.italic,
-          ),
-        )
-      ), 
+      child: Semantics(
+        child: Icon(Icons.camera_alt, color: Colors.white,),
+        button: true,
+        onTapHint: "Open Camera",
+        ), 
       color: Colors.deepOrange,
     ),
   );
@@ -80,16 +69,11 @@ Widget TakeNewPhotoButton(BuildContext context, Function() func){
         onPressed: () {
           func();
         },
-        child: (
-          Text(
-            "Take New Photo", 
-            style: TextStyle(
-              color: Colors.white, 
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-            ),
-          )
-        ), 
+        child: Semantics(
+          child: Icon(Icons.camera_alt, color: Colors.white,),
+          button: true,
+          onTapHint: "Open Camera",
+        ),
         color: Colors.deepOrange,
     )
   );
@@ -102,17 +86,12 @@ Widget GetGalleryImageButton(BuildContext context, Function() func){
       onPressed: () {
         func();
       },
-      child: (
-        Text(
-          "Get Image From Gallery", 
-          style: TextStyle(
-            color: Colors.white, 
-            fontSize: 20,
-            fontStyle: FontStyle.italic,
-          ),
-        )
-      ), 
-      color: Colors.deepOrange,
+      child: Semantics(
+        child: Icon(Icons.image, color: Colors.white,),
+        button: true,
+        onTapHint: "Open Gallery",
+      ),
+      color: Colors.deepOrange, 
     ),
   );
 }
@@ -124,16 +103,11 @@ Widget GetNewGalleryImageButton(BuildContext context, Function() func){
       onPressed: () {
         func();
       },
-      child: (
-        Text(
-          "Get New Image", 
-          style: TextStyle(
-            color: Colors.white, 
-            fontSize: 20,
-            fontStyle: FontStyle.italic,
-          ),
-        )
-      ), 
+      child: Semantics(
+        child: Icon(Icons.image, color: Colors.white,),
+        button: true,
+        onTapHint: "Open Gallery",
+      ),
       color: Colors.deepOrange,
     ),
   );
