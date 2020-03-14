@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+
+//MODEL CLASS: Post()
 
 class Post {
 
